@@ -7,3 +7,4 @@ node_modules
 test-reports
 coverage
 /dist
+/src/data/users.ts

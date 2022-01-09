@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { AddressInfo } from 'net'
 import appRouterInstance from './routes';
+import BearerAuth from './utility/BearerAuth';
 
 const HOST_NAME = 'localhost';
 const PORT = 80;
@@ -18,6 +19,7 @@ function startApp() {
 function configureMiddleware(app: Express) {
     app.use(express.json());
     app.use(express.static(`${__dirname}/../public`)); 
+    app.use(BearerAuth.verfiyToken);
 }
 
 function configureRoutes(app: Express) {
