@@ -8,15 +8,19 @@ const PORT = 80;
 
 function startApp() {
     const app = express();
+    configureMiddleware(app);
     configureRoutes(app);
     const server: Server = app.listen(PORT, HOST_NAME, () =>
         handleAppStart(server)
     );
 }
 
-function configureRoutes(app: Express) {
+function configureMiddleware(app: Express) {
     app.use(express.json());
-    app.use(express.static(`${__dirname}/../public`));
+    app.use(express.static(`${__dirname}/../public`)); 
+}
+
+function configureRoutes(app: Express) {
     app.use('/', appRouterInstance.getRouter())
 }
 
