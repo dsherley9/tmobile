@@ -7,33 +7,35 @@ import BearerAuth from './utility/BearerAuth';
 const HOST_NAME = 'localhost';
 const PORT = 80;
 
-function startApp() {
-    const app = express();
-    configureMiddleware(app);
-    configureRoutes(app);
-    const server: Server = app.listen(PORT, HOST_NAME, () =>
-        handleAppStart(server)
-    );
+class ExpressApp {
+    public app: Express = express();
+    public server?: Server;
+
+    public start(): void {
+        this.configureMiddleware();
+        this.configureRoutes();
+        this.server = this.app.listen(PORT, HOST_NAME, this.handleAppStart.bind(this));
+    }
+    
+    public configureMiddleware(): void {
+        this.app.use(express.json());
+        this.app.use(express.static(`${__dirname}/../public`)); 
+        this.app.use(BearerAuth.verfiyToken);
+    }
+    
+    public configureRoutes(): void {
+        this.app.use('/', appRouterInstance.getRouter())
+    }
+    
+    public handleAppStart(): void {
+        const address = this.server?.address()
+    
+        const binding = typeof address === 'string'
+            ? `pipe/socket ${address}`
+            : `port ${(address as AddressInfo).port}`;
+    
+        console.log(`Server listening on ${binding}.`);
+    }
 }
 
-function configureMiddleware(app: Express) {
-    app.use(express.json());
-    app.use(express.static(`${__dirname}/../public`)); 
-    app.use(BearerAuth.verfiyToken);
-}
-
-function configureRoutes(app: Express) {
-    app.use('/', appRouterInstance.getRouter())
-}
-
-function handleAppStart(server: Server) {
-    const address = server.address()
-
-    const binding = typeof address === 'string'
-        ? `pipe/socket ${address}`
-        : `port ${(address as AddressInfo).port}`;
-
-    console.log(`Server listening on ${binding}.`);
-}
-
-startApp();
+export default ExpressApp;
