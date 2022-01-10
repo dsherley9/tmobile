@@ -22,4 +22,6 @@ type SuccessResponse<T = any> = BaseResponse & {
 
 type InvalidRequestResponse = BaseError;
 
-export { SuccessResponse, InvalidRequestResponse };
+type NotFoundRespose = BaseError;
+
+export { SuccessResponse, InvalidRequestResponse, NotFoundRespose };
