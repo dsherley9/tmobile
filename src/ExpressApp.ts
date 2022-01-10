@@ -6,9 +6,6 @@ import BearerAuth from './utility/BearerAuth';
 import DotEnv from 'dotenv';
 DotEnv.config();
 
-const HOST_NAME = 'localhost';
-const PORT = 80;
-
 class ExpressApp {
     public app: Express = express();
     public server?: Server;
