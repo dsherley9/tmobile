@@ -3,6 +3,8 @@ import { Server } from 'http';
 import { AddressInfo } from 'net'
 import appRouterInstance from './routes';
 import BearerAuth from './utility/BearerAuth';
+import DotEnv from 'dotenv';
+DotEnv.config();
 
 const HOST_NAME = 'localhost';
 const PORT = 80;
@@ -10,11 +12,13 @@ const PORT = 80;
 class ExpressApp {
     public app: Express = express();
     public server?: Server;
+    public host = process.env.HOST ?? 'localhost';
+    public port = Number(process.env.PORT) ?? 80;
 
     public start(): void {
         this.configureMiddleware();
         this.configureRoutes();
-        this.server = this.app.listen(PORT, HOST_NAME, this.handleAppStart.bind(this));
+        this.server = this.app.listen(this.port, this.host, this.handleAppStart.bind(this));
     }
     
     public configureMiddleware(): void {
